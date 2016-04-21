@@ -1,0 +1,4 @@
+Hypoxanthine AACT
+Xanthine GGGCATCT
+Cytosine TTGCAACT
+Thymine ATCT
