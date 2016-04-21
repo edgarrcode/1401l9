@@ -121,9 +121,9 @@ public class DNAtools {
      * target strings), and sorts the 1D array of DNAsequences by the average of their 
      * number of occurrences in each of the target strings (highest to lowest).
      ***********************************************************************************/
-    //public static void SortByBestOccurrenceAverage(DNAsequence[] A, String[] targets) {
+    public static void SortByBestOccurrenceAverage(DNAsequence[] A, String[] targets) {
         // your code goes here
-    //}
+    }
 
 
     /**********************************************************************************
@@ -181,7 +181,10 @@ public class DNAtools {
         myDNAsequences[0].setlength(5);
         PrintSequenceArray(myDNAsequences);
 
-        FindBestMatchSequence(myDNAsequences,myTargets);
+        System.out.println("------");
+        System.out.println("FindBestMatchSequence:");
+        FindBestMatchSequence(myDNAsequences,myTargets).Print();;
+
     }
 
 }
