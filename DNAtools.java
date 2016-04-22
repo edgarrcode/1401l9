@@ -87,7 +87,7 @@ public class DNAtools {
     public static void PrintSequenceArray(DNAsequence[] A) {
         // your code goes here
         for (int i = 0; i < A.length; i++) {
-            System.out.println("------");
+            System.out.println();
             A[i].Print();
         }
 
@@ -108,7 +108,6 @@ public class DNAtools {
         double matchesTotal = 0;
         int i = 0;
         int j = 0;
-        int k = 0;
 
         for (i = 0; i < A.length; i++) {
             matchesTotal = 0;
@@ -124,7 +123,6 @@ public class DNAtools {
             if (avg > avgHighest) {
                 avgHighest = avg;
                 sequenceHighest = A[i];
-                //set sequence to empty
             }
         }
 
@@ -139,6 +137,24 @@ public class DNAtools {
      ***********************************************************************************/
     public static void SortByBestOccurrenceAverage(DNAsequence[] A, String[] targets) {
         // your code goes here
+        DNAsequence[] mySortedDNAsequences = new DNAsequence[A.length];
+        DNAsequence sequenceHighest;
+        String seqName = "";
+        String seq = "";
+
+        for (int i = 0; i < A.length; i++) {
+            
+            sequenceHighest = FindBestMatchSequence(A, targets);
+
+            seqName = sequenceHighest.getName();
+            seq = sequenceHighest.getSequence();
+
+            mySortedDNAsequences[i] = new DNAsequence(seqName,seq,seq.length());
+
+            sequenceHighest.setSequence("");
+            sequenceHighest.setLength(0);
+        }
+        PrintSequenceArray(mySortedDNAsequences);
     }
 
 
@@ -187,20 +203,23 @@ public class DNAtools {
         String[] myTargets = ReadTargetsFromFile(filename);
 
         //* 5.    You run the relevant class methods from DNAsequence to fill the attributes.
+        System.out.println("DNA Sequences:");
         PrintSequenceArray(myDNAsequences);
-        System.out.println("------");
-/*        System.out.println("Setting myDNAsequences[3].name to \"Edgars\"");
-        myDNAsequences[3].setName("Edgars");
-        System.out.println("Setting myDNAsequences[3].sequence to \"\"");
-        myDNAsequences[3].setSequence("");
-        System.out.println("Setting myDNAsequences[3].length to \"0\"");
-        myDNAsequences[3].setlength(0);
-        PrintSequenceArray(myDNAsequences);*/
+        
+        System.out.println("\n------\n");
+        System.out.println("Setting myDNAsequences[3].name to \"Edgars\"");
+        myDNAsequences[0].setName("Edgars");
+        System.out.println("Setting myDNAsequences[3].sequence to \"AACT\"");
+        myDNAsequences[0].setSequence("AACT");
+        System.out.println("Setting myDNAsequences[3].length to \"4\"");
+        myDNAsequences[0].setLength(4);
+        System.out.println("DNA Sequences after modification:");
+        PrintSequenceArray(myDNAsequences);
 
-        //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out. 
-        System.out.println("------");
-        System.out.println("FindBestMatchSequence:");
-        FindBestMatchSequence(myDNAsequences,myTargets).Print();;
+        //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out.
+        System.out.println("\n------\n");
+        System.out.println("Printing My Sorted DNA Sequences:");
+        SortByBestOccurrenceAverage(myDNAsequences,myTargets);
 
     }
 

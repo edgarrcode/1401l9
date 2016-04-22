@@ -58,7 +58,7 @@ public class DNAsequence {
 		sequence = seqSequence;
 	}
 	
-	public void setlength(int seqlength) {
+	public void setLength(int seqlength) {
 		// your code goes here
 		length = seqlength;
 	}
