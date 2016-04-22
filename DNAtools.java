@@ -101,18 +101,35 @@ public class DNAtools {
      ***********************************************************************************/
     public static DNAsequence FindBestMatchSequence(DNAsequence[] A, String[] targets) {
         // your code goes here
-        int resultLargest = 0;
-        int resultTemp = 0;
-        DNAsequence sequenceLargest = A[0];
-        for (int i = 0; i < A.length; i++) {
-            resultTemp = A[i].countSubStringMatch(targets[i]);
-            if (resultTemp > resultLargest) {
-                resultLargest = resultTemp;
-                sequenceLargest = A[i];
+        double avgHighest = 0;
+        double avg = 0;
+        DNAsequence sequenceHighest = A[0];
+        double[] matches = new double[targets.length];
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        for (i = 0; i < A.length; i++) {
+            for (j = 0; j < targets.length; j++) {
+                matches[j] = A[i].countSubStringMatch(targets[j]);
+            }
+            // if null?
+            avg = matches[0];
+
+            for (k = 1; k < targets.length; k++) {
+                avg = avg + matches[k];
+            }
+
+            avg = avg / targets.length;
+
+
+            if (avg > avgHighest) {
+                avgHighest = avg;
+                sequenceHighest = A[i];
             }
         }
 
-        return sequenceLargest;
+        return sequenceHighest;
     }
 
     /**********************************************************************************
@@ -172,15 +189,16 @@ public class DNAtools {
 
         //* 5.    You run the relevant class methods from DNAsequence to fill the attributes.
         PrintSequenceArray(myDNAsequences);
-        System.out.println("------");
-        System.out.println("Setting myDNAsequences[0].name to \"Edgars\"");
-        myDNAsequences[0].setName("Edgars");
-        System.out.println("Setting myDNAsequences[0].sequence to \"EEEEE\"");
-        myDNAsequences[0].setSequence("EEEEE");
-        System.out.println("Setting myDNAsequences[0].length to \"5\"");
-        myDNAsequences[0].setlength(5);
-        PrintSequenceArray(myDNAsequences);
+        //System.out.println("------");
+        //System.out.println("Setting myDNAsequences[0].name to \"Edgars\"");
+        //myDNAsequences[0].setName("Edgars");
+        //System.out.println("Setting myDNAsequences[0].sequence to \"EEEEE\"");
+        //myDNAsequences[0].setSequence("EEEEE");
+        //System.out.println("Setting myDNAsequences[0].length to \"5\"");
+        //myDNAsequences[0].setlength(5);
+        //PrintSequenceArray(myDNAsequences);
 
+        //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out. 
         System.out.println("------");
         System.out.println("FindBestMatchSequence:");
         FindBestMatchSequence(myDNAsequences,myTargets).Print();;
