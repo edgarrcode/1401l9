@@ -98,7 +98,7 @@ public class DNAsequence {
      * C’s, G’s, and T’s.
 	 ***********************************************************************/
 	public void Print() {
-	   // your code goes here
+		// your code goes here
 		System.out.println("Name: " + name);
 		System.out.println("Sequence: " + sequence);
 		System.out.println("Length: " + length);

@@ -105,32 +105,26 @@ public class DNAtools {
         double avg = 0;
         DNAsequence sequenceHighest = A[0];
         double[] matches = new double[targets.length];
+        double matchesTotal = 0;
         int i = 0;
         int j = 0;
         int k = 0;
 
         for (i = 0; i < A.length; i++) {
-            if (A[i]!=null) {
-                System.out.println("i = "+ i);
-                for (j = 0; j < targets.length; j++) {
-                    System.out.println("j = "+ j);
-                        matches[j] = A[i].countSubStringMatch(targets[j]);
-                        System.out.println("matches[" + j + "] = "+ matches[j]);
-
+            matchesTotal = 0;
+            for (j = 0; j < targets.length; j++) {
+                if (A[i].getLength() > 0) {
+                    matches[j] = A[i].countSubStringMatch(targets[j]);
+                    matchesTotal = matchesTotal + matches[j];
                 }
-                avg = matches[0];
+            }
+            avg = matchesTotal/targets.length;
 
-                for (k = 1; k < targets.length; k++) {
-                    avg = avg + matches[k];
-                }
 
-                avg = avg / targets.length;
-                System.out.println("avg after division" + avg);
-
-                if (avg > avgHighest) {
-                    avgHighest = avg;
-                    sequenceHighest = A[i];
-                }
+            if (avg > avgHighest) {
+                avgHighest = avg;
+                sequenceHighest = A[i];
+                //set sequence to empty
             }
         }
 
@@ -195,13 +189,13 @@ public class DNAtools {
         //* 5.    You run the relevant class methods from DNAsequence to fill the attributes.
         PrintSequenceArray(myDNAsequences);
         System.out.println("------");
-        System.out.println("Setting myDNAsequences[3].name to \"Edgars\"");
+/*        System.out.println("Setting myDNAsequences[3].name to \"Edgars\"");
         myDNAsequences[3].setName("Edgars");
-        System.out.println("Setting myDNAsequences[3].sequence to \"ZZZ\"");
-        myDNAsequences[3].setSequence("ZZZ");
-        System.out.println("Setting myDNAsequences[3].length to \"3\"");
-        myDNAsequences[3].setlength(3);
-        PrintSequenceArray(myDNAsequences);
+        System.out.println("Setting myDNAsequences[3].sequence to \"\"");
+        myDNAsequences[3].setSequence("");
+        System.out.println("Setting myDNAsequences[3].length to \"0\"");
+        myDNAsequences[3].setlength(0);
+        PrintSequenceArray(myDNAsequences);*/
 
         //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out. 
         System.out.println("------");
