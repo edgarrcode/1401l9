@@ -64,6 +64,20 @@ public class DNAsequence {
 	}
 	
     // complete here with more mutators, as relevant
+	public void setAs(int seqAs) {
+		As = seqAs;
+	}
+	public void setCs(int seqCs) {
+		Cs = seqCs;
+	}
+	public void setGs(int seqGs) {
+		Gs = seqGs;
+	}
+	public void setTs(int seqTs) {
+		Ts = seqTs;
+	}
+
+
     
 	/**************** GETTERS / ACCESSORS **********************************
 	 * Methods that allow to access the values of the attributes
@@ -83,7 +97,23 @@ public class DNAsequence {
 		// your code goes here
 		return length;
 	}
-	
+
+	public int getAs() {
+		return As;
+	}
+
+	public int getCs() {
+		return Cs;
+	}
+
+	public int getGs() {
+		return Gs;
+	}
+
+	public int getTs() {
+		return Ts;
+	}
+
     // complete here with more accessors, as relevant
 	
 	/***********************************************************************

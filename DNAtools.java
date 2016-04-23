@@ -117,8 +117,8 @@ public class DNAtools {
                     matchesTotal = matchesTotal + matches[j];
                 }
             }
-            avg = matchesTotal/targets.length;
-
+            //consider an array of averages
+            avg = matchesTotal / targets.length;
 
             if (avg > avgHighest) {
                 avgHighest = avg;
@@ -143,7 +143,7 @@ public class DNAtools {
         String seq = "";
 
         for (int i = 0; i < A.length; i++) {
-            
+
             sequenceHighest = FindBestMatchSequence(A, targets);
 
             seqName = sequenceHighest.getName();
@@ -221,6 +221,10 @@ public class DNAtools {
         System.out.println("Printing My Sorted DNA Sequences:");
         SortByBestOccurrenceAverage(myDNAsequences,myTargets);
 
+        //* 7.    You sort the array obtained in Step 6 using method SortByLetter where the letter is A, and print it out. 
+        System.out.println("\n------\n");
+        System.out.println("hello");
+        PrintSequenceArray(mySortedDNAsequences);
     }
 
 }
