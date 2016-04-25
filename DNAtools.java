@@ -75,6 +75,7 @@ public class DNAtools {
         }
         
         textReader.close();
+
         return myTargets; 
     }
 
@@ -104,7 +105,7 @@ public class DNAtools {
         double avgHighest = 0;
         double avg = 0;
         DNAsequence sequenceHighest = A[0];
-        double[] matches = new double[targets.length];
+        double matches = 0;
         double matchesTotal = 0;
         int i = 0;
         int j = 0;
@@ -113,11 +114,11 @@ public class DNAtools {
             matchesTotal = 0;
             for (j = 0; j < targets.length; j++) {
                 if (A[i].getLength() > 0) {
-                    matches[j] = A[i].countSubStringMatch(targets[j]);
-                    matchesTotal = matchesTotal + matches[j];
+                    matches = A[i].countSubStringMatch(targets[j]);
+                    matchesTotal = matchesTotal + matches;
                 }
             }
-            //consider an array of averages
+
             avg = matchesTotal / targets.length;
 
             if (avg > avgHighest) {
@@ -137,24 +138,60 @@ public class DNAtools {
      ***********************************************************************************/
     public static void SortByBestOccurrenceAverage(DNAsequence[] A, String[] targets) {
         // your code goes here
-        DNAsequence[] mySortedDNAsequences = new DNAsequence[A.length];
-        DNAsequence sequenceHighest;
-        String seqName = "";
-        String seq = "";
+        double[] avg = new double[A.length];
+        double matches = 0;
+        double matchesTotal = 0;
+        int i = 0;
+        int j = 0;
 
-        for (int i = 0; i < A.length; i++) {
+        for (i = 0; i < A.length; i++) {
+            matchesTotal = 0;
+            for (j = 0; j < targets.length; j++) {
+                if (A[i].getLength() > 0) {
+                    matches = A[i].countSubStringMatch(targets[j]);
+                    matchesTotal = matchesTotal + matches;
+                }
+            }
 
-            sequenceHighest = FindBestMatchSequence(A, targets);
+            avg[i] = matchesTotal / targets.length;
 
-            seqName = sequenceHighest.getName();
-            seq = sequenceHighest.getSequence();
-
-            mySortedDNAsequences[i] = new DNAsequence(seqName,seq,seq.length());
-
-            sequenceHighest.setSequence("");
-            sequenceHighest.setLength(0);
         }
-        PrintSequenceArray(mySortedDNAsequences);
+
+        double avgHighest = 0;
+        int indexHighest = 0;
+        double tempAvg = 0;
+        String tempName = "";
+        DNAsequence tempDNAsequences = new DNAsequence("temp","A",1);
+        for (i = 0; i < A.length; i++) {
+            //find best in range
+            avgHighest = avg[i];
+            indexHighest = i;
+            for (j = i; j < A.length; j++) {
+                if (avg[j] > avgHighest) {
+                    avgHighest = avg[j];
+                    indexHighest = j;
+                }
+            }
+            //swap
+            tempAvg = avg[i];
+            avg[i] = avg[indexHighest];
+            avg[indexHighest] = tempAvg;
+            //swap dnaSequences
+            tempDNAsequences.setName(A[i].getName());
+            A[i].setName(A[indexHighest].getName());
+            A[indexHighest].setName(tempDNAsequences.getName());
+
+            tempDNAsequences.setSequence(A[i].getSequence());
+            A[i].setSequence(A[indexHighest].getSequence());
+            A[indexHighest].setSequence(tempDNAsequences.getSequence());
+
+            A[i].setLength(A[i].getSequence().length());
+            A[indexHighest].setLength(A[indexHighest].getSequence().length());
+
+        }
+
+        PrintSequenceArray(A);
+
     }
 
 
@@ -164,9 +201,95 @@ public class DNAtools {
      * as an input and sorts the 1D array of DNAsequences by the number of such letter 
      * in each DNAsequence (in descending order of such letter). 
      ***********************************************************************************/
-    /*public static void SortByLetter(DNAsequence[] A, char c) {
-        // your code goes here   
-    }*/
+    public static void SortByLetter(DNAsequence[] A, char c) {
+        // your code goes here
+        String theSequence = "";
+        int i = 0;
+        int j = 0;
+        int counter = 0;
+        int[] characterTotal = new int[A.length];
+
+        // count character in sequence
+        for (i = 0; i < A.length; i++) {
+            theSequence = A[i].getSequence();
+            for (j = 0; j < theSequence.length(); j++) {
+                if(theSequence.charAt(j) == c) {
+                    counter++;
+                }
+            }
+            characterTotal[i] = counter;
+            counter = 0;
+            if (c == 'A'){
+                A[i].setAs(characterTotal[i]);
+            }
+            else if (c == 'C') {
+                A[i].setCs(characterTotal[i]);
+            }
+            else if (c == 'G') {
+                A[i].setGs(characterTotal[i]);
+            }
+            else if (c == 'T') {
+                A[i].setTs(characterTotal[i]);
+            }
+        }
+        
+
+        // sort array by character ammount, from highest to lowest
+        int charCountHighest = 0;
+        int indexHighest = 0;
+        int tempCharCount = 0;
+        DNAsequence tempDNAsequences = new DNAsequence("temp","A",1);
+        for (i = 0; i < A.length; i++) {
+            //find best in range
+            charCountHighest = characterTotal[i];
+            indexHighest = i;
+            for (j = i; j < A.length; j++) {
+                if (characterTotal[j] > charCountHighest) {
+                    charCountHighest = characterTotal[j];
+                    indexHighest = j;
+                }
+            }
+            //swap
+            tempCharCount = characterTotal[i];
+            characterTotal[i] = characterTotal[indexHighest];
+            characterTotal[indexHighest] = tempCharCount;
+
+            //swap dnaSequences
+            tempDNAsequences.setName(A[i].getName());
+            A[i].setName(A[indexHighest].getName());
+            A[indexHighest].setName(tempDNAsequences.getName());
+
+            tempDNAsequences.setSequence(A[i].getSequence());
+            A[i].setSequence(A[indexHighest].getSequence());
+            A[indexHighest].setSequence(tempDNAsequences.getSequence());
+
+            A[i].setLength(A[i].getSequence().length());
+            A[indexHighest].setLength(A[indexHighest].getSequence().length());
+
+            if (c == 'A'){
+                tempDNAsequences.setAs(A[i].getAs());
+                A[i].setAs(A[indexHighest].getAs());
+                A[indexHighest].setAs(tempDNAsequences.getAs());
+            }
+            else if (c == 'C') {
+                tempDNAsequences.setCs(A[i].getCs());
+                A[i].setCs(A[indexHighest].getCs());
+                A[indexHighest].setCs(tempDNAsequences.getCs());
+            }
+            else if (c == 'G') {
+                tempDNAsequences.setGs(A[i].getGs());
+                A[i].setGs(A[indexHighest].getGs());
+                A[indexHighest].setGs(tempDNAsequences.getGs());
+            }
+            else if (c == 'T') {
+                tempDNAsequences.setTs(A[i].getTs());
+                A[i].setTs(A[indexHighest].getTs());
+                A[indexHighest].setTs(tempDNAsequences.getTs());
+            }
+        }
+
+        PrintSequenceArray(A);
+    }
     
     
     /**********************************************************************************
@@ -202,19 +325,26 @@ public class DNAtools {
         //* 4.    You read the file and retrieve information about target strings by calling method ReadTargetsFromFile 
         String[] myTargets = ReadTargetsFromFile(filename);
 
+        System.out.println("\nDNA Sequences:");
+        PrintSequenceArray(myDNAsequences);
+
         //* 5.    You run the relevant class methods from DNAsequence to fill the attributes.
-        System.out.println("DNA Sequences:");
-        PrintSequenceArray(myDNAsequences);
-        
         System.out.println("\n------\n");
-        System.out.println("Setting myDNAsequences[3].name to \"Edgars\"");
-        myDNAsequences[0].setName("Edgars");
-        System.out.println("Setting myDNAsequences[3].sequence to \"AACT\"");
+        System.out.println("Setting myDNAsequences[0].name to \"Edgars (previously Hypoxanthine)\"");
+        myDNAsequences[0].setName("Edgars (previously Hypoxanthine)");
+        System.out.println("Setting myDNAsequences[0].sequence to \"AACT\"");
         myDNAsequences[0].setSequence("AACT");
-        System.out.println("Setting myDNAsequences[3].length to \"4\"");
-        myDNAsequences[0].setLength(4);
-        System.out.println("DNA Sequences after modification:");
+        System.out.println("Setting myDNAsequences[0].length to \"4\"");
+        myDNAsequences[0].setLength(myDNAsequences[0].getSequence().length());
+        System.out.println("\nPrinting DNA Sequences after modification:");
         PrintSequenceArray(myDNAsequences);
+
+
+        //FindBestMatchSequence
+        System.out.println("\n------\n");
+        System.out.println("Printing FindBestMatchSequence:");
+        FindBestMatchSequence(myDNAsequences,myTargets).Print();
+
 
         //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out.
         System.out.println("\n------\n");
@@ -223,8 +353,25 @@ public class DNAtools {
 
         //* 7.    You sort the array obtained in Step 6 using method SortByLetter where the letter is A, and print it out. 
         System.out.println("\n------\n");
-        System.out.println("hello");
-        PrintSequenceArray(mySortedDNAsequences);
+        System.out.println("SortByLetter where the letter is A. And populating As.");
+        SortByLetter(myDNAsequences, 'A');
+
+        //* 8.    You sort the array obtained in Step 7 using method SortByLetter where the letter is C, and print it out. 
+        System.out.println("\n------\n");
+        System.out.println("SortByLetter where the letter is C. And populating Cs.");
+        SortByLetter(myDNAsequences, 'C');
+
+        //* 9.    You sort the array obtained in Step 8 using method SortByLetter where the letter is G, and print it out. 
+        System.out.println("\n------\n");
+        System.out.println("SortByLetter where the letter is G. And populating Gs.");
+        SortByLetter(myDNAsequences, 'G');
+
+        //* 10.    You sort the array obtained in Step 9 using method SortByLetter where the letter is T, and print it out. 
+        System.out.println("\n------\n");
+        System.out.println("SortByLetter where the letter is T. And populating Ts.");
+        SortByLetter(myDNAsequences, 'T');
+
+
     }
 
 }
