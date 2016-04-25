@@ -26,7 +26,16 @@ public class DNAtools {
         while (textReader.readLine()!=null) {
             numOfLines++;
         }
-        
+        // Exception 1 Edgarr Note: Checking if file has content
+        try {
+            if (numOfLines == 0) {
+                throw new IOException("File is empty. Enter a file with Sequence Name, and Sequence (e.g. \"Hypoxanthine AACT\")");
+            }
+        }
+        catch (IOException excpt1) {
+            System.out.println(excpt1.getMessage());
+        }
+
         DNAsequence[] myDNAsequences = new DNAsequence[numOfLines];
 
         // your code goes here
@@ -35,12 +44,22 @@ public class DNAtools {
         String seqName = "";
         String seq = "";
         for (int i = 0; i < numOfLines; i++) {
-            line = textReader.readLine().split(" ");
+            // Exception 2 Edgarr Note: Checking if file has contentEdgarr Note: Checking if data is in correct format
+            try{
+                line = textReader.readLine().split(" ");
+                if (line.length != 2) {
+                    throw new IOException("You need a file with data in this format: \"Hypoxanthine AACT\"");
+                }
+            }
+            catch (IOException excpt2) {
+                System.out.println(excpt2.getMessage());
+            }
             seqName = line[0];
             seq = line[1];
             myDNAsequences[i] = new DNAsequence(seqName,seq,seq.length());
         }
-        
+
+
         textReader.close();
         return myDNAsequences; 
     }
@@ -65,7 +84,15 @@ public class DNAtools {
         while (textReader.readLine()!=null) {
             numOfLines++;
         }
-        
+        // Exception 3 Edgarr Note: Checking if file has content
+        try {
+            if (numOfLines == 0)
+            throw new IOException("File is empty. Enter a file with targets (e.g. \"ATGCAACTATGCAACT\")");
+        }
+        catch (IOException excpt3) {
+            System.out.println(excpt3.getMessage());
+        }
+
         String[] myTargets = new String[numOfLines];
 
         // your code goes here
@@ -119,13 +146,33 @@ public class DNAtools {
                 }
             }
 
-            avg = matchesTotal / targets.length;
+            // Exception 9 Edgarr Note: Checking division by 0.
+            try {
+                avg = matchesTotal / targets.length;
+                if(targets.length == 0) {
+                    throw new ArithmeticException("Targets are empty. You are dividing by 0.");
+                }
+            }
+            catch (ArithmeticException excpt9) {
+                System.out.println(excpt9.getMessage());
+            }
 
             if (avg > avgHighest) {
                 avgHighest = avg;
                 sequenceHighest = A[i];
             }
         }
+
+        // Exception 4 Edgarr Note: Checking if targets array is empty.
+        try {
+            if(targets.length == 0) {
+                throw new Exception("Targets array is empty. Nothing will be compared.");
+            }
+        }
+        catch (Exception excpt4) {
+            System.out.println(excpt4.getMessage());
+        }
+
 
         return sequenceHighest;
     }
@@ -163,7 +210,6 @@ public class DNAtools {
         String tempName = "";
         DNAsequence tempDNAsequences = new DNAsequence("temp","A",1);
         for (i = 0; i < A.length; i++) {
-            //find best in range
             avgHighest = avg[i];
             indexHighest = i;
             for (j = i; j < A.length; j++) {
@@ -315,13 +361,8 @@ public class DNAtools {
         System.out.print("Enter file name with sequences:");
         filename = scnr.next();
         
-        //* 2.    You read the file and retrieve information about DNAsequences by calling method ReadSequencesFromFile 
-        //try {
-            DNAsequence[] myDNAsequences = ReadSequencesFromFile(filename);
-        //}
-        //catch (ArrayIndexOutOfBoundsException excep) {
-            System.out.println ("Cannot convert input. Please enter integer.");
-        //}
+        //* 2.    You read the file and retrieve information about DNAsequences by calling method ReadSequencesFromFile
+        DNAsequence[] myDNAsequences = ReadSequencesFromFile(filename);
 
         //* 3.    You ask the user for a file name
         System.out.print("Enter file name with targets:");
@@ -331,25 +372,53 @@ public class DNAtools {
         String[] myTargets = ReadTargetsFromFile(filename);
 
         System.out.println("\nDNA Sequences:");
+        // Exception 5 Edgarr Note: Checking if myDNAsequences array is empty.
+        try {
+            if(myDNAsequences.length == 0) {
+                throw new Exception("Sequence array is empty. Nothing will be printed.");
+            }
+        }
+        catch (Exception excpt5) {
+            System.out.println(excpt5.getMessage());
+        }
         PrintSequenceArray(myDNAsequences);
 
         //* 5.    You run the relevant class methods from DNAsequence to fill the attributes.
         System.out.println("\n------\n");
         System.out.println("Setting myDNAsequences[0].name to \"Edgars (previously Hypoxanthine)\"");
-        myDNAsequences[0].setName("Edgars (previously Hypoxanthine)");
+        // Exception 6 Edgarr Note: Checking if myDNAsequences array is empty.
+        try {
+            myDNAsequences[0].setName("Edgars (previously Hypoxanthine)");
+        }
+        catch (ArrayIndexOutOfBoundsException excpt6) {
+            System.out.println("Cant access \"myDNAsequences[0].name\" because myDNAsequences Array is empty.\n");
+        }
+
         System.out.println("Setting myDNAsequences[0].sequence to \"AACT\"");
-        myDNAsequences[0].setSequence("AACT");
+        // Exception 7 Edgarr Note: Checking if myDNAsequences array is empty.
+        try {
+            myDNAsequences[0].setSequence("AACT");
+        }
+        catch (ArrayIndexOutOfBoundsException excpt7) {
+            System.out.println("Cant access \"myDNAsequences[0].sequence\" because myDNAsequences Array is empty.\n");
+        }
+
         System.out.println("Setting myDNAsequences[0].length to \"4\"");
-        myDNAsequences[0].setLength(myDNAsequences[0].getSequence().length());
+        // Exception 8 Edgarr Note: Checking if myDNAsequences array is empty.
+        try {
+            myDNAsequences[0].setLength(myDNAsequences[0].getSequence().length());
+        }
+        catch (ArrayIndexOutOfBoundsException excpt8) {
+            System.out.println("Cant access \"myDNAsequences[0].Length\" because myDNAsequences Array is empty.\n");
+        }
+
         System.out.println("\nPrinting DNA Sequences after modification:");
         PrintSequenceArray(myDNAsequences);
-
 
         //FindBestMatchSequence
         System.out.println("\n------\n");
         System.out.println("Printing FindBestMatchSequence:");
         FindBestMatchSequence(myDNAsequences,myTargets).Print();
-
 
         //* 6.    You sort the array obtained in Step 2 using method SortByBestOccurrenceAverage and print it out.
         System.out.println("\n------\n");
