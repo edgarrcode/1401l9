@@ -316,7 +316,12 @@ public class DNAtools {
         filename = scnr.next();
         
         //* 2.    You read the file and retrieve information about DNAsequences by calling method ReadSequencesFromFile 
-        DNAsequence[] myDNAsequences = ReadSequencesFromFile(filename);
+        //try {
+            DNAsequence[] myDNAsequences = ReadSequencesFromFile(filename);
+        //}
+        //catch (ArrayIndexOutOfBoundsException excep) {
+            System.out.println ("Cannot convert input. Please enter integer.");
+        //}
 
         //* 3.    You ask the user for a file name
         System.out.print("Enter file name with targets:");
